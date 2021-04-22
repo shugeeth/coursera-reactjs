@@ -1,4 +1,5 @@
-import { Card, CardBody, CardText, CardTitle, CardImg, ListGroup, ListGroupItem } from "reactstrap";
+import { Card, CardBody, CardText, CardTitle, CardImg, ListGroup, ListGroupItem, Breadcrumb, BreadcrumbItem } from "reactstrap";
+import { Link } from "react-router-dom";
 
 // Date Converter Function
 // function dateConverter(date) {
@@ -26,9 +27,8 @@ function RenderDish({dish}){
     }
 }
 
-function RenderComments({dish}){
-    if(dish!=null && dish.comments!=null){
-        var comments = dish.comments;
+function RenderComments({comments}){
+    if(comments!=null){
         const commentList = comments.map((comment)=>{
             return(
                 <ListGroupItem key={comment.id}>
@@ -56,14 +56,26 @@ function RenderComments({dish}){
 
 const DishDetail = (props) => {
     return(
-        <div className="row">
-            <div className="col-12 col-md-5 m-1">
-                <RenderDish dish={props.dish} />
+        <>
+            <div className="row mt-3">
+                <Breadcrumb>
+                    <BreadcrumbItem><Link to="/menu">Menu</Link></BreadcrumbItem>
+                    <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
+                </Breadcrumb>
+                <div className="col-12">
+                    <h3>{props.dish.name}</h3>
+                    <hr />
+                </div>                
             </div>
-            <div className="col-12 col-md-5 m-1">
-                <RenderComments dish={props.dish} />
+            <div className="row">
+                <div className="col-12 col-md-5 m-1">
+                    <RenderDish dish={props.dish} />
+                </div>
+                <div className="col-12 col-md-5 m-1">
+                    <RenderComments comments={props.comments} />
+                </div>
             </div>
-        </div>
+        </>
     );
 }
  
