@@ -2,3 +2,6 @@
     font-weight: 500;
     /* font-variant: small-caps; */
 }
+.card-subtitle {
+    font-style: italic;
+}
