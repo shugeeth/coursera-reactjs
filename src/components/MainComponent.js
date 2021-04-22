@@ -13,6 +13,7 @@ import Footer from "./FooterComponent";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Home from "./HomeComponent";
 import Contact from "./ContactComponent";
+import About from "./AboutComponent";
 
 class Main extends Component {
   constructor(props){
@@ -50,7 +51,8 @@ class Main extends Component {
                 dishClick={(dishId) => this.onDishSelect(dishId)} /> */}
             <Switch>
               <Route path="/home" component={HomePage} />
-              <Route exact path="/menu" component={ () => <Menu dishes={this.state.dishes}/> } />
+              <Route path="/aboutus" component={()=><About leaders={this.state.leaders}/>} />
+              <Route exact path="/menu" component={()=><Menu dishes={this.state.dishes}/> } />
               <Route path="/menu/:dishId" component={DishWithId} />
               <Route path="/contactus" component={Contact} />
               <Redirect to="/home" />
