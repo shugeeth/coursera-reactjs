@@ -1,5 +1,10 @@
-import { Card, CardBody, CardText, CardTitle, CardImg, ListGroup, ListGroupItem, Breadcrumb, BreadcrumbItem } from "reactstrap";
+/* eslint-disable react/jsx-pascal-case */
+import { Button, Row, Label, Card, CardBody, CardText, CardTitle, CardImg, 
+        ListGroup, ListGroupItem, Breadcrumb, BreadcrumbItem,
+        Modal, ModalHeader, ModalBody, Col } from "reactstrap";
 import { Link } from "react-router-dom";
+import { LocalForm, Control, Errors } from "react-redux-form";
+import { Component } from "react";
 
 // Date Converter Function
 // function dateConverter(date) {
@@ -43,6 +48,7 @@ function RenderComments({comments}){
                     <ListGroup>
                         {commentList}
                     </ListGroup>
+                    <CommentForm />
                 </div>
         );
     }
@@ -50,6 +56,95 @@ function RenderComments({comments}){
         return(
             <div></div>
         );
+    }
+    
+}
+
+const minLength = (len) => (val) => (val) && (val.length >= len)
+const maxLength = (len) => (val) => (!val) || (val.length <= len)
+
+class CommentForm extends Component{
+
+    constructor(props){
+        super(props);
+        this.state = {
+            isModalOpen: false
+        }
+        this.toggleModal = this.toggleModal.bind(this);
+        this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
+    }
+
+    toggleModal(){
+        this.setState({
+            isModalOpen: !this.state.isModalOpen
+        });
+    }
+
+    handleCommentSubmit(values){
+        console.log(values);
+        alert('Current State is: ' + JSON.stringify(values));
+        this.toggleModal();
+    }
+
+    render(){
+        return(
+            <>
+                <Button outline className="mt-3" onClick={this.toggleModal}>
+                    <span className="fa fa-pencil"></span> &nbsp;Submit Comment
+                </Button>
+                <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+                    <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
+                    <ModalBody>
+                        <LocalForm onSubmit={(values) => this.handleCommentSubmit(values)}>
+                            <Row class="form-group">
+                                <Col md={12}>
+                                    <Label htmlFor="rating">Rating</Label>
+                                    <Control.select model=".rating" id="rating" name="rating"
+                                        className = "form-control">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                    </Control.select>
+                                </Col>
+                            </Row>
+                            <Row class="form-group">
+                                <Col md={12}>
+                                    <Label htmlFor="author">Your Name</Label>
+                                    <Control.text model=".author" id="author" name="author"
+                                        placeholder="Your Name"
+                                        className = "form-control" 
+                                        validators = {{
+                                            minLength: minLength(3),
+                                            maxLength: maxLength(15)
+                                        }} 
+                                    />
+                                    <Errors 
+                                        className = "text-danger"
+                                        model = ".author"
+                                        show = "touched"
+                                        messages = {{
+                                            minLength: "Must be greater than 2 characters",
+                                            maxLength: "Must be 15 characters or less"
+                                        }} 
+                                    />
+                                </Col>
+                            </Row>
+                            <Row class="form-group">
+                                <Col md={12}>
+                                    <Label htmlFor="comment">Comment</Label>
+                                    <Control.textarea model=".comment" id="comment" name="comment"
+                                        rows="6"
+                                        className = "form-control" />
+                                </Col>
+                            </Row>
+                            <Button className="mt-3" type="submit" value="submit" color="primary">Submit</Button>
+                        </LocalForm>
+                    </ModalBody>
+                </Modal>
+            </>
+        );    
     }
     
 }
