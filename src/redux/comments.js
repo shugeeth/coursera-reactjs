@@ -8,6 +8,9 @@ export const Comments = (state=COMMENTS, action) => {
             comment.id = state.length;
             comment.date = new Date().toISOString();
             return state.concat(comment);
+        case ActionTypes.DELETE_COMMENT:
+            var commentId = action.payload.commentId;
+            return state.filter( comment => comment.id !== commentId);
         default:
             return state;
     }

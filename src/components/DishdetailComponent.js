@@ -32,13 +32,20 @@ function RenderDish({dish}){
     }
 }
 
-function RenderComments({comments, addComment, dishId}){
+function RenderComments({comments, addComment, deleteComment, dishId}){
     if(comments!=null){
         const commentList = comments.map((comment)=>{
             return(
                 <ListGroupItem key={comment.id}>
-                <div>{comment.comment}</div>
-                <div className="card-title">-- {comment.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</div>
+                    <Row>
+                        <Col md={10}>
+                            <div>{comment.comment}</div>
+                            <div className="comment-card-title">-- {comment.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</div>
+                        </Col>
+                        <Col md={2} className="align-self-start d-flex justify-content-end">
+                            <div><span onClick={(event) => deleteComment(comment.id)} className="fa fa-times-circle-o fa-lg text-secondary clickable"></span></div>
+                        </Col>
+                    </Row>
                 </ListGroupItem>
             );
         })
@@ -173,6 +180,7 @@ const DishDetail = (props) => {
                 <div className="col-12 col-md-5 m-1">
                     <RenderComments comments={props.comments}
                             addComment={props.addComment}
+                            deleteComment = {props.deleteComment}
                             dishId={props.dish.id} />
                 </div>
             </div>

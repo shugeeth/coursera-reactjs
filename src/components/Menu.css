@@ -1,7 +1,14 @@
 .card-title {
     font-weight: 500;
+    /* margin-bottom: 0; */
     /* font-variant: small-caps; */
 }
 .card-subtitle {
     font-style: italic;
+}
+.comment-card-title{
+    font-weight: 500;
+}
+.clickable{
+    cursor: pointer;
 }

@@ -9,3 +9,10 @@ export const addComment = (dishId, rating, author, comment) => ({
         comment: comment
     }
 });
+
+export const deleteComment = (commentId) => ({
+    type: ActionTypes.DELETE_COMMENT,
+    payload: {
+        commentId
+    }
+});
