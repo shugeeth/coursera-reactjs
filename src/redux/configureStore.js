@@ -1,10 +1,14 @@
-import {createStore, combineReducers} from 'redux';
+import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import { Dishes } from "./dishes";
 import { Comments } from "./comments";
 import { Promotions } from "./promotions";
 import { Leaders } from "./leaders";
+import thunk from 'redux-thunk';
+import logger from 'redux-logger';
 
 export const ConfigureStore = () => {
+    const reduxDevTools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
+    const enhancers = [ applyMiddleware(thunk, logger), reduxDevTools ]
     const store = createStore(
         combineReducers({
             dishes: Dishes,
@@ -12,7 +16,8 @@ export const ConfigureStore = () => {
             promotions: Promotions,
             leaders: Leaders
         }),
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+        compose(...enhancers)
+        
     );
 
     return store;

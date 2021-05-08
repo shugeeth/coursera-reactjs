@@ -5,6 +5,7 @@ import { Button, Row, Label, Card, CardBody, CardText, CardTitle, CardImg,
 import { Link } from "react-router-dom";
 import { LocalForm, Control, Errors } from "react-redux-form";
 import { Component } from "react";
+import { Loading } from "./LoadingComponent";
 
 // Date Converter Function
 // function dateConverter(date) {
@@ -14,22 +15,15 @@ import { Component } from "react";
 // }
 
 function RenderDish({dish}){
-    if(dish != null){
-        return ( 
-            <Card>
-                <CardImg width="100%" src={dish.image} alt={dish.name} />
-                <CardBody>
-                    <CardTitle>{dish.name}</CardTitle>
-                    <CardText>{dish.description}</CardText>
-                </CardBody>
-            </Card>
-        );
-    }
-    else{
-        return(
-            <div></div>
-        );
-    }
+    return ( 
+        <Card>
+            <CardImg width="100%" src={dish.image} alt={dish.name} />
+            <CardBody>
+                <CardTitle>{dish.name}</CardTitle>
+                <CardText>{dish.description}</CardText>
+            </CardBody>
+        </Card>
+    );
 }
 
 function RenderComments({comments, addComment, deleteComment, dishId}){
@@ -38,11 +32,11 @@ function RenderComments({comments, addComment, deleteComment, dishId}){
             return(
                 <ListGroupItem key={comment.id}>
                     <Row>
-                        <Col md={10}>
+                        <Col xs={10}>
                             <div>{comment.comment}</div>
                             <div className="comment-card-title">-- {comment.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</div>
                         </Col>
-                        <Col md={2} className="align-self-start d-flex justify-content-end">
+                        <Col xs={2} className="align-self-start d-flex justify-content-end">
                             <div><span onClick={(event) => deleteComment(comment.id)} className="fa fa-times-circle-o fa-lg text-secondary clickable"></span></div>
                         </Col>
                     </Row>
@@ -90,7 +84,6 @@ class CommentForm extends Component{
 
     handleCommentSubmit(values){
         this.toggleModal();
-        console.log(values);
         this.props.addComment(
             this.props.dishId, values.rating,
             values.author, values.comment
@@ -107,7 +100,7 @@ class CommentForm extends Component{
                     <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
                     <ModalBody>
                         <LocalForm onSubmit={(values) => this.handleCommentSubmit(values)}>
-                            <Row class="form-group">
+                            <Row className="form-group">
                                 <Col md={12}>
                                     <Label htmlFor="rating">Rating</Label>
                                     <Control.select model=".rating" id="rating" name="rating"
@@ -120,7 +113,7 @@ class CommentForm extends Component{
                                     </Control.select>
                                 </Col>
                             </Row>
-                            <Row class="form-group">
+                            <Row className="form-group">
                                 <Col md={12}>
                                     <Label htmlFor="author">Your Name</Label>
                                     <Control.text model=".author" id="author" name="author"
@@ -142,7 +135,7 @@ class CommentForm extends Component{
                                     />
                                 </Col>
                             </Row>
-                            <Row class="form-group">
+                            <Row className="form-group">
                                 <Col md={12}>
                                     <Label htmlFor="comment">Comment</Label>
                                     <Control.textarea model=".comment" id="comment" name="comment"
@@ -161,31 +154,49 @@ class CommentForm extends Component{
 }
 
 const DishDetail = (props) => {
-    return(
-        <>
-            <div className="row mt-3">
-                <Breadcrumb>
-                    <BreadcrumbItem><Link to="/menu">Menu</Link></BreadcrumbItem>
-                    <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
-                </Breadcrumb>
-                <div className="col-12">
-                    <h3>{props.dish.name}</h3>
-                    <hr />
-                </div>                
-            </div>
-            <div className="row">
-                <div className="col-12 col-md-5 m-1">
-                    <RenderDish dish={props.dish} />
+    if(props.isLoading){
+        return(
+            <Loading />
+        );
+    }
+    else if(props.errMess){
+        return(
+            <h4>Error in Fetching Dishes: {props.errMess}</h4>
+        );
+    }
+    else if(props.dish!=null){
+        return(
+            <>
+                <div className="row mt-3">
+                    <Breadcrumb>
+                        <BreadcrumbItem><Link to="/menu">Menu</Link></BreadcrumbItem>
+                        <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
+                    </Breadcrumb>
+                    <div className="col-12">
+                        <h3>{props.dish.name}</h3>
+                        <hr />
+                    </div>                
                 </div>
-                <div className="col-12 col-md-5 m-1">
-                    <RenderComments comments={props.comments}
-                            addComment={props.addComment}
-                            deleteComment = {props.deleteComment}
-                            dishId={props.dish.id} />
+                <div className="row">
+                    <div className="col-12 col-md-5 m-1">
+                        <RenderDish dish={props.dish} />
+                    </div>
+                    <div className="col-12 col-md-5 m-1">
+                        <RenderComments comments={props.comments}
+                                addComment={props.addComment}
+                                deleteComment = {props.deleteComment}
+                                dishId={props.dish.id} />
+                    </div>
                 </div>
-            </div>
-        </>
-    );
+            </>
+        );
+    }
+    else{
+        return(
+            <div></div>
+        );
+    }
+    
 }
  
 export default DishDetail;
