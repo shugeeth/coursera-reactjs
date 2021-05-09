@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { LocalForm, Control, Errors } from "react-redux-form";
 import { Component } from "react";
 import { Loading } from "./LoadingComponent";
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
 // Date Converter Function
 // function dateConverter(date) {
@@ -15,14 +16,21 @@ import { Loading } from "./LoadingComponent";
 // }
 
 function RenderDish({dish}){
-    return ( 
-        <Card>
-            <CardImg width="100%" src={dish.image} alt={dish.name} />
-            <CardBody>
-                <CardTitle>{dish.name}</CardTitle>
-                <CardText>{dish.description}</CardText>
-            </CardBody>
-        </Card>
+    return (
+        <FadeTransform
+            in
+            transformProps={{
+                exitTransform: 'scale(0.5) translateY(-50%)'
+            }}
+        >
+            <Card>
+                <CardImg width="100%" src={dish.image} alt={dish.name} />
+                <CardBody>
+                    <CardTitle>{dish.name}</CardTitle>
+                    <CardText>{dish.description}</CardText>
+                </CardBody>
+            </Card>
+        </FadeTransform> 
     );
 }
 
@@ -30,24 +38,28 @@ function RenderComments({comments, addComment, deleteComment, dishId}){
     if(comments!=null){
         const commentList = comments.map((comment)=>{
             return(
-                <ListGroupItem key={comment.id}>
-                    <Row>
-                        <Col xs={10}>
-                            <div>{comment.comment}</div>
-                            <div className="comment-card-title">-- {comment.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</div>
-                        </Col>
-                        <Col xs={2} className="align-self-start d-flex justify-content-end">
-                            <div><span onClick={(event) => deleteComment(comment.id)} className="fa fa-times-circle-o fa-lg text-secondary clickable"></span></div>
-                        </Col>
-                    </Row>
-                </ListGroupItem>
+                <Fade in>
+                    <ListGroupItem key={comment.id}>
+                        <Row>
+                            <Col xs={10}>
+                                <div>{comment.comment}</div>
+                                <div className="comment-card-title">-- {comment.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</div>
+                            </Col>
+                            <Col xs={2} className="align-self-start d-flex justify-content-end">
+                                <div><span onClick={(event) => deleteComment(comment.id)} className="fa fa-times-circle-o fa-lg text-secondary clickable"></span></div>
+                            </Col>
+                        </Row>
+                    </ListGroupItem>
+                </Fade>
             );
         })
         return(
                 <div>
                     <h4>Comments</h4>
                     <ListGroup>
-                        {commentList}
+                        <Stagger in>
+                            {commentList}
+                        </Stagger>
                     </ListGroup>
                     <CommentForm dishId={dishId} 
                                  addComment={addComment} />
