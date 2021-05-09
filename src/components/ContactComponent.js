@@ -164,9 +164,9 @@ class Contact extends Component {
                             </Row>
                             <Row className="form-group">
                                 <Col md={{size: 6, offset: 2}}>
-                                    <Row check>
+                                    <Row>
                                         <Label check>
-                                            <Control.checkbox model=".checkbox"
+                                            <Control.checkbox model=".agree"
                                                 name="agree"
                                                 className = "form-check-input" /> {' '}
                                             <strong>May we contact you?</strong>
