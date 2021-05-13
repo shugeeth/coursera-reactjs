@@ -25,7 +25,7 @@ const Menu = (props) => {
     }
     else if(props.dishes.errMess){
         return(
-            <h4>Error in Fetching Dishes: {props.dishes.errMess}</h4>
+            <h4>{props.dishes.errMess}</h4>
         );
     }
     else{

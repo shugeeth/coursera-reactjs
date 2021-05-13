@@ -174,7 +174,7 @@ const DishDetail = (props) => {
     }
     else if(props.errMess){
         return(
-            <h4>Error in Fetching Dishes: {props.errMess}</h4>
+            <h4>{props.errMess}</h4>
         );
     }
     else if(props.dish!=null){
