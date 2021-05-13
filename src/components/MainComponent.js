@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import Home from "./HomeComponent";
 import Contact from "./ContactComponent";
 import About from "./AboutComponent";
-import { addComment, deleteComment, fetchDishes } from "../redux/ActionCreators";
+import { addComment, deleteComment, fetchComments, fetchDishes, fetchPromos } from "../redux/ActionCreators";
 import { actions } from "react-redux-form";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
@@ -28,6 +28,8 @@ const mapDispatchToProps = (dispatch) => ({
   addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
   deleteComment: (commentId) => dispatch(deleteComment(commentId)),
   fetchDishes: () => {dispatch(fetchDishes())},
+  fetchComments: () => {dispatch(fetchComments())},
+  fetchPromos: () => {dispatch(fetchPromos())},
   resetFeedbackForm: () => dispatch(actions.reset('feedback'))
 });
 
@@ -39,6 +41,8 @@ class Main extends Component {
   
   componentDidMount(){
     this.props.fetchDishes();  
+    this.props.fetchComments();  
+    this.props.fetchPromos();  
   }
 
   render(){
@@ -48,9 +52,15 @@ class Main extends Component {
         <Home dish={this.props.dishes.dishes.filter(dish=>dish.featured)[0]} 
           dishesLoading={this.props.dishes.isLoading}
           dishesErrMess={this.props.dishes.errMess}
-          promotion={this.props.promotions.filter(promo=>promo.featured)[0]} 
-            leader={this.props.leaders.filter(lead=>lead.featured)[0]} />
+          promotion={this.props.promotions.promotions.filter(promo=>promo.featured)[0]} 
+          promosLoading={this.props.promotions.isLoading}
+          promosErrMess={this.props.promotions.errMess}
+          leader={this.props.leaders.filter(lead=>lead.featured)[0]} />
       );
+    }
+
+    function selectComments(commentsPack, dishId){
+      return commentsPack.comments.filter((comment)=>comment.dishId===parseInt(dishId))
     }
 
     const DishWithId = ({match}) => {
@@ -58,9 +68,10 @@ class Main extends Component {
         <DishDetail dish={this.props.dishes.dishes.filter((dish)=>dish.id===parseInt(match.params.dishId))[0]} 
                   isLoading={this.props.dishes.isLoading}
                   errMess={this.props.dishes.errMess}
-                  comments={this.props.comments.filter((comment)=>comment.dishId===parseInt(match.params.dishId))} 
+                  comments={selectComments(this.props.comments, match.params.dishId)} 
                   addComment={this.props.addComment}
-                  deleteComment={this.props.deleteComment} />
+                  deleteComment={this.props.deleteComment}
+                  commentsErrMess={this.props.comments.errMess} />
       );
     }
 

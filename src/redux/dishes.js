@@ -1,6 +1,4 @@
 import * as ActionTypes from "./ActionTypes";
-//Commenting the below line as the data is added through a THUNK in the ActionCreators.js
-//import { DISHES } from '../shared/dishes';
 
 export const Dishes = (state = {
         isLoading: true,

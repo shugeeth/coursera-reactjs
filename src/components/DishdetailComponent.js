@@ -7,6 +7,7 @@ import { LocalForm, Control, Errors } from "react-redux-form";
 import { Component } from "react";
 import { Loading } from "./LoadingComponent";
 import { FadeTransform, Fade, Stagger } from 'react-animation-components';
+import { baseUrl } from "../shared/baseUrl";
 
 // Date Converter Function
 // function dateConverter(date) {
@@ -24,7 +25,7 @@ function RenderDish({dish}){
             }}
         >
             <Card>
-                <CardImg width="100%" src={dish.image} alt={dish.name} />
+                <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name} />
                 <CardBody>
                     <CardTitle>{dish.name}</CardTitle>
                     <CardText>{dish.description}</CardText>
@@ -38,8 +39,8 @@ function RenderComments({comments, addComment, deleteComment, dishId}){
     if(comments!=null){
         const commentList = comments.map((comment)=>{
             return(
-                <Fade in>
-                    <ListGroupItem key={comment.id}>
+                <Fade in key={comment.id}>
+                    <ListGroupItem>
                         <Row>
                             <Col xs={10}>
                                 <div>{comment.comment}</div>
