@@ -9,7 +9,7 @@ export const Comments = (state = {
             var comment = action.payload.comment;
             return {...state, 
                     comments: state.comments.concat(comment) };
-        case ActionTypes.DELETE_COMMENT:
+        case ActionTypes.REMOVE_COMMENT:
             var commentId = action.payload.commentId;
             return {...state, 
                     comments : state.comments.filter( comment => comment.id !== commentId) };

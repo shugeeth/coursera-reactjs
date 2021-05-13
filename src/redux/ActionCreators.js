@@ -9,12 +9,43 @@ export const addComment = (comment) => ({
     }
 });
 
-export const deleteComment = (commentId) => ({
-    type: ActionTypes.DELETE_COMMENT,
+export const removeComment = (commentId) => ({
+    type: ActionTypes.REMOVE_COMMENT,
     payload: {
         commentId
     }
 });
+
+//THUNK for removing comments
+export const deleteComment = (commentId) => (dispatch) => {
+    fetch(baseUrl + 'comments/' + commentId,
+    {
+        method: 'DELETE',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "same-origin"
+    })
+    .then(
+        response => {
+          if (response.ok) {
+            return response;
+          } else {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+          }
+        },
+        error => {
+          throw error;
+        }
+      )
+      .then(response => dispatch(removeComment(commentId)))
+      .catch(error =>  { 
+          console.log('The comment could not be deleted\nError: ', error.message); 
+          alert('The comment could not be deleted\nError: '+error.message); 
+      });
+}
 
 //THUNK for posting comments
 export const postComment = (dishId, rating, author, comment) => (dispatch) => {
