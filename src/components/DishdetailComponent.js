@@ -35,7 +35,7 @@ function RenderDish({dish}){
     );
 }
 
-function RenderComments({comments, addComment, deleteComment, dishId}){
+function RenderComments({comments, postComment, deleteComment, dishId}){
     if(comments!=null){
         const commentList = comments.map((comment)=>{
             return(
@@ -63,7 +63,7 @@ function RenderComments({comments, addComment, deleteComment, dishId}){
                         </Stagger>
                     </ListGroup>
                     <CommentForm dishId={dishId} 
-                                 addComment={addComment} />
+                                 postComment={postComment} />
                 </div>
         );
     }
@@ -97,7 +97,7 @@ class CommentForm extends Component{
 
     handleCommentSubmit(values){
         this.toggleModal();
-        this.props.addComment(
+        this.props.postComment(
             this.props.dishId, values.rating,
             values.author, values.comment
         );
@@ -196,7 +196,7 @@ const DishDetail = (props) => {
                     </div>
                     <div className="col-12 col-md-5 m-1">
                         <RenderComments comments={props.comments}
-                                addComment={props.addComment}
+                                postComment={props.postComment}
                                 deleteComment = {props.deleteComment}
                                 dishId={props.dish.id} />
                     </div>

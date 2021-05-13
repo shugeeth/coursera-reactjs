@@ -2,13 +2,10 @@ import * as ActionTypes from "./ActionTypes";
 import { baseUrl } from "../shared/baseUrl";
 import fetch from 'cross-fetch';
 
-export const addComment = (dishId, rating, author, comment) => ({
+export const addComment = (comment) => ({
     type: ActionTypes.ADD_COMMENT,
     payload: {
-        dishId: dishId,
-        rating: rating,
-        author: author,
-        comment: comment
+        comment
     }
 });
 
@@ -18,6 +15,50 @@ export const deleteComment = (commentId) => ({
         commentId
     }
 });
+
+//THUNK for posting comments
+export const postComment = (dishId, rating, author, comment) => (dispatch) => {
+
+    const newComment = {
+        dishId: dishId,
+        rating: rating,
+        author: author,
+        comment: comment
+    };
+    newComment.date = new Date().toISOString();
+    
+    return fetch(baseUrl + 'comments', 
+    //Passing the object for post
+    {
+        method: "POST",
+        body: JSON.stringify(newComment),
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "same-origin"
+    })
+    .then(
+      response => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error('Error ' + response.status + ': ' + response.statusText);
+          error.response = response;
+          throw error;
+        }
+      },
+      error => {
+        throw error;
+      }
+    )
+    .then(response => response.json())
+    .then(response => dispatch(addComment(response)))
+    .catch(error =>  { 
+        console.log('post comments', error.message); 
+        alert('Your comment could not be posted\nError: '+error.message); 
+    });
+};
+
 
 //THUNK - returns an function with dispatch and getState parameters to be passed,
 //whereas a normal action creator returns an object with type and payload properties.

@@ -22,7 +22,6 @@ export const ConfigureStore = () => {
             })
         }),
         compose(...enhancers)
-        
     );
 
     return store;

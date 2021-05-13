@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import Home from "./HomeComponent";
 import Contact from "./ContactComponent";
 import About from "./AboutComponent";
-import { addComment, deleteComment, fetchComments, fetchDishes, fetchPromos } from "../redux/ActionCreators";
+import { postComment, deleteComment, fetchComments, fetchDishes, fetchPromos } from "../redux/ActionCreators";
 import { actions } from "react-redux-form";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
@@ -25,7 +25,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
+  postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment)),
   deleteComment: (commentId) => dispatch(deleteComment(commentId)),
   fetchDishes: () => {dispatch(fetchDishes())},
   fetchComments: () => {dispatch(fetchComments())},
@@ -69,7 +69,7 @@ class Main extends Component {
                   isLoading={this.props.dishes.isLoading}
                   errMess={this.props.dishes.errMess}
                   comments={selectComments(this.props.comments, match.params.dishId)} 
-                  addComment={this.props.addComment}
+                  postComment={this.props.postComment}
                   deleteComment={this.props.deleteComment}
                   commentsErrMess={this.props.comments.errMess} />
       );
